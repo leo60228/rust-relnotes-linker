@@ -4,17 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "functions-framework --target=relnotes"
   },
   "author": "",
   "license": "GPL-2.0-only",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "regextag": "^1.0.0",
+    "timed-cache": "^1.1.4"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^1.7.1"
-  },
-  "scripts": {
-    "start": "functions-framework --target=relnotes"
   }
 }

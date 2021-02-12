@@ -1,11 +1,68 @@
 const fetch = require('node-fetch');
+const RegExTag = require('regextag');
+const Cache = require('timed-cache');
 
-exports.relnotes = (req, res) => {
+const jsonTtl = 1000 * 60 * 5;
+const releaseTtl = 1000 * 60 * 60 * 24;
+const cache = new Cache();
+
+async function getReleases() {
+    const cachedReleases = cache.get('releases');
+
+    if (cachedReleases) {
+        return cachedReleases;
+    } else {
+        const releasesReq = await fetch('https://blog.rust-lang.org/releases.json');
+        const { releases: revReleases } = await releasesReq.json();
+        const releases = revReleases.reverse();
+
+        cache.put('releases', releases, { ttl: jsonTtl });
+
+        return releases;
+    }
+}
+
+async function getRelease(version) {
+    const normalizedVersion = version.replace(/(1\.[0-9]+)\.0$/, '$1');
+
+    const cachedRelease = cache.get(normalizedVersion);
+
+    if (cachedRelease) {
+        return cachedRelease;
+    } else {
+        const releases = await getReleases();
+        const versionRegex = RegExTag()`\b${normalizedVersion}(?:\.0)?\b`;
+
+        for (const { url, title } of releases) {
+            if (versionRegex.test(title)) {
+                cache.put(normalizedVersion, url, { ttl: releaseTtl });
+                return url;
+            }
+            versionRegex.lastIndex = 0;
+        }
+    }
+
+    return null;
+}
+
+exports.relnotes = async (req, res) => {
+    res.type('text/plain');
+
     if (req.method !== 'GET') {
-        res.status(405).send('405 Method Not Allowed');
+        res.status(405).send(`Only GET is accepted.`);
         return;
     }
 
     const { version } = req.query;
-    res.send('Hello, world!');
+    if (typeof version !== 'string') {
+        res.status(400).send(`Couldn't get a version string.`);
+        return;
+    }
+
+    const release = await getRelease(version);
+    if (release !== null) {
+        res.redirect(release);
+    } else {
+        res.status(204).send(`Couldn't find release ${version}.`);
+    }
 };
