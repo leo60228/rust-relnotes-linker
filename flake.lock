@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "cloudSdkNixpkgs": {
+      "locked": {
+        "lastModified": 1612996220,
+        "narHash": "sha256-l2kzWXxL3vXr8VxUzRtORPJS0nFQ3E5kBPF/AYAK0wI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "758b29b5a28b818e311ad540637a5c1e40867489",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1610051610,
@@ -33,6 +49,7 @@
     },
     "root": {
       "inputs": {
+        "cloudSdkNixpkgs": "cloudSdkNixpkgs",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }

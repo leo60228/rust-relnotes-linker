@@ -53,15 +53,15 @@ exports.relnotes = async (req, res) => {
         return;
     }
 
-    const { version } = req.query;
-    if (typeof version !== 'string') {
+    const { release } = req.query;
+    if (typeof release !== 'string') {
         res.status(400).send(`Couldn't get a version string.`);
         return;
     }
 
-    const release = await getRelease(version);
-    if (release !== null) {
-        res.redirect(release);
+    const url = await getRelease(release);
+    if (url !== null) {
+        res.redirect(url);
     } else {
         res.status(204).send(`Couldn't find release ${version}.`);
     }

@@ -1,11 +1,11 @@
 {
   "name": "rust-relnotes-linker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "functions-framework --target=relnotes",
-    "deploy": "gcloud functions deploy relnotes --runtime nodejs10 --trigger-http --allow-unauthenticated --memory=128MB"
+    "deploy": "gcloud alpha functions deploy relnotes --runtime nodejs10 --trigger-http --allow-unauthenticated --memory 128MB --security-level secure-always"
   },
   "author": "",
   "license": "GPL-2.0-only",
