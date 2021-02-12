@@ -35,8 +35,9 @@ async function getRelease(version) {
 
         for (const { url, title } of releases) {
             if (versionRegex.test(title)) {
-                cache.put(normalizedVersion, url, { ttl: releaseTtl });
-                return url;
+                const absUrl = new URL(url, 'https://blog.rust-lang.org/releases.json').toString();
+                cache.put(normalizedVersion, absUrl, { ttl: releaseTtl });
+                return absUrl;
             }
             versionRegex.lastIndex = 0;
         }
