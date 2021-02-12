@@ -8,7 +8,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ nodejs-10_x ];
+          nativeBuildInputs = with pkgs; [ nodejs-10_x google-cloud-sdk ];
         };
       }
     );
